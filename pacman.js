@@ -48,7 +48,6 @@ const foods = new Set();
 const ghosts = new Set();
 let pacman;
 
-let gameLoop;
 const directions = ['U', 'D', 'L', 'R']; //up down left right
 let score = 0;
 let lives = 3;
@@ -62,11 +61,14 @@ window.onload = function() {
 
     loadImages();
     loadMap();
+    // console.log(walls.size)
+    // console.log(foods.size)
+    // console.log(ghosts.size)
     for (let ghost of ghosts.values()) {
         const newDirection = directions[Math.floor(Math.random()*4)];
         ghost.updateDirection(newDirection);
     }
-    setTimeout(update, 50);
+    update();
     document.addEventListener("keyup", movePacman);
 }
 
@@ -143,7 +145,7 @@ function update() {
     }
     move();
     draw();
-    setTimeout(update, 50);
+    setTimeout(update, 50); //1000/50 = 20 FPS
 }
 
 function draw() {
@@ -219,10 +221,12 @@ function move() {
         if (collision(pacman, food)) {
             foodEaten = food;
             score += 10;
+            break;
         }
     }
     foods.delete(foodEaten);
 
+    //next level
     if (foods.size == 0) {
         loadMap();
         resetPositions();
@@ -230,7 +234,6 @@ function move() {
 }
 
 function movePacman(e) {
-    console.log(gameOver);
     if (gameOver) {
         loadMap();
         resetPositions();
@@ -241,16 +244,16 @@ function movePacman(e) {
         return;
     }
 
-    if (e.code == "ArrowUp") {
+    if (e.code == "ArrowUp" || e.code == "KeyW") {
         pacman.updateDirection('U');
     }
-    else if (e.code == "ArrowDown") {
+    else if (e.code == "ArrowDown" || e.code == "KeyS") {
         pacman.updateDirection('D');
     }
-    else if (e.code == "ArrowLeft") {
+    else if (e.code == "ArrowLeft" || e.code == "KeyA") {
         pacman.updateDirection('L');
     }
-    else if (e.code == "ArrowRight") {
+    else if (e.code == "ArrowRight" || e.code == "KeyD") {
         pacman.updateDirection('R');
     }
 
