@@ -171,7 +171,7 @@ function draw() {
         context.fillText("Game Over: " + String(score), tileSize/2, tileSize/2);
     }
     else {
-        context.fillText("x" + String(lives) + " " + String(score), tileSize/4, tileSize/2);
+        context.fillText("x" + String(lives) + " " + String(score), tileSize/2, tileSize/2);
     }
 }
 
@@ -302,7 +302,7 @@ class Block {
         this.startX = x;
         this.startY = y;
 
-        this.direction = 'U';
+        this.direction = 'R';
         this.velocityX = 0;
         this.velocityY = 0;
     }
