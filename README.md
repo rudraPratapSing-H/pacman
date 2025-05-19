@@ -1,6 +1,7 @@
 # [Pacman](https://youtu.be/WxeTMsaSOaA)
 - Coding Tutorial: [https://youtu.be/WxeTMsaSOaA](https://youtu.be/WxeTMsaSOaA)
-
+- Demo: https://imkennyyip.github.io/pacman/
+- 
 In this tutorial, you will learn how to code pac-man using javascript and HTML5 canvas.
 
 Throughout the tutorial, you will learn how to draw on the HTML5 canvas,  create the game loop,  load the game map using a tilemap, add click handlers to make the pacman move, create a simple algorithm to move each ghost at random, detect collisions between the pacman and ghosts, have pacman eat the food pellets, add a running score, reset the game when pacman collides with a ghost, and move onto the next level once pacman eats all the food pellets in the current stage. 
