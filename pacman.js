@@ -211,7 +211,7 @@ function loadMap() {
 
 function update() {
   if (gameOver) {
-    window.location.reload();
+    
     return;
   }
   move();
@@ -313,7 +313,8 @@ function move() {
         gameOver = true;
         setTimeout(() => {
           gameOverSound.play();
-        });
+        },4000);
+        window.location.reload();
         return;
       }
       resetPositions();
