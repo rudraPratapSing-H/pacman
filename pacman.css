@@ -1,8 +1,58 @@
 body {
-    text-align: center;
-    overflow: hidden;
+  margin: 0;
+  background-color: #111;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  height: 100vh;
+  overflow: hidden;
 }
 
 #board {
-    background-color: black;
+  background-color: black;
+  margin-top: 1rem;
+  max-width: 100vw;
+  height: auto;
+}
+
+.joystick-container {
+  margin-top: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.joystick.vertical,
+.joystick.horizontal {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+.joystick.vertical {
+  flex-direction: column;
+}
+
+.joystick.horizontal {
+  flex-direction: row;
+}
+
+button {
+  width: 60px;
+  height: 60px;
+  font-size: 24px;
+  font-weight: bold;
+  border-radius: 50%;
+  border: none;
+  background-color: #222;
+  color: white;
+  cursor: pointer;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+  transition: background-color 0.2s ease;
+}
+
+button:active {
+  background-color: #444;
 }

@@ -18,15 +18,13 @@ let pacmanRightImage;
 let wallImage;
 
 //Sound Efects;
-const startingSound = new Audio('amongUsSound.mp3');
-const bonusSound = new Audio('bonus.mp3');
-const attackSound = new Audio('attack.mp3');
-const collisionSound = new Audio('');
+const startingSound = new Audio("amongUsSound.mp3");
+const bonusSound = new Audio("bonus.mp3");
+const attackSound = new Audio("attack.mp3");
+const collisionSound = new Audio("");
 const powerSound = new Audio();
-const gameOverSound = new Audio('gameOver.mp3')
-const gameSound = new Audio('gameBackground.mp3')
-
-
+const gameOverSound = new Audio("gameOver.mp3");
+const gameSound = new Audio("gameBackground.mp3");
 
 //X = wall, O = skip, P = pac man, ' ' = food
 //Ghosts: b = blue, o = orange, p = pink, r = red
@@ -53,7 +51,6 @@ const tileMap = [
   "XXXXXXXXXXXXXXXXXXX",
 ];
 
-
 const walls = new Set();
 const foods = new Set();
 const ghosts = new Set();
@@ -65,6 +62,24 @@ let lives = 3;
 let gameOver = false;
 
 window.onload = function () {
+  function simulateKeyPress(key) {
+    document.dispatchEvent(new KeyboardEvent("keyup", movePacman(key)));
+  }
+
+  document.querySelector(".north").addEventListener("click", () => {
+    simulateKeyPress("w");
+    console.log("w");
+  });
+  document.querySelector(".south").addEventListener("click", () => {
+    simulateKeyPress("s");
+    console.log("s");
+  });
+  document
+    .querySelector(".west")
+    .addEventListener("click", () => simulateKeyPress("a"));
+  document
+    .querySelector(".east")
+    .addEventListener("click", () => simulateKeyPress("d"));
   setTimeout(() => {
     gameSound.play();
   }, 500); // small delay to respect browser autoplay policies
@@ -145,11 +160,15 @@ function loadMap() {
       }
     }
   }
-  document.addEventListener('keydown', ()=>{
-    console.log("amongUS")
-    
-    gameSound.play();
-  },{once: true})
+  document.addEventListener(
+    "keydown",
+    () => {
+      console.log("amongUS");
+
+      gameSound.play();
+    },
+    { once: true }
+  );
 }
 
 function update() {
@@ -247,15 +266,15 @@ function move() {
     // Check if ghost collided with Pac-Man
     if (collision(ghost, pacman)) {
       lives -= 1;
-      setTimeout(()=>{
-        attackSound.currentTime = 70/1000;
+      setTimeout(() => {
+        attackSound.currentTime = 70 / 1000;
         attackSound.play();
-      })
+      });
       if (lives == 0) {
         gameOver = true;
-        setTimeout(()=>{
-          gameOverSound.play()
-        })
+        setTimeout(() => {
+          gameOverSound.play();
+        });
         return;
       }
       resetPositions();
@@ -313,12 +332,11 @@ function move() {
     if (collision(pacman, food)) {
       foodEaten = food;
       score += 10;
-      setTimeout(()=>{
-        bonusSound.currentTime = 100/1000;
-        console.log('bonusSouund!')
-        bonusSound.play()
-      }, )
-      
+      setTimeout(() => {
+        bonusSound.currentTime = 100 / 1000;
+        console.log("bonusSouund!");
+        bonusSound.play();
+      });
     }
   }
   foods.delete(foodEaten);
@@ -341,13 +359,13 @@ function movePacman(e) {
     return;
   }
 
-  if (e.code == "ArrowUp" || e.code == "KeyW") {
+  if (e.code == "ArrowUp" || e.code == "KeyW" || e == "w") {
     pacman.updateDirection("U");
-  } else if (e.code == "ArrowDown" || e.code == "KeyS") {
+  } else if (e.code == "ArrowDown" || e.code == "KeyS" || e == "s") {
     pacman.updateDirection("D");
-  } else if (e.code == "ArrowLeft" || e.code == "KeyA") {
+  } else if (e.code == "ArrowLeft" || e.code == "KeyA" || e == "a") {
     pacman.updateDirection("L");
-  } else if (e.code == "ArrowRight" || e.code == "KeyD") {
+  } else if (e.code == "ArrowRight" || e.code == "KeyD" || e == "d") {
     pacman.updateDirection("R");
   }
 

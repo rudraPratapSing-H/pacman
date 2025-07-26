@@ -1,13 +1,152 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport", content="width=device-width, initial-scale=1.0">
-        <title>Pac-Man</title>
-        <link rel="stylesheet" href="pacman.css">
-        <script src="pacman.js"></script>
-    </head>
-    <body>
-        <canvas id="board"></canvas>
-    </body>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mobile Game Controller</title>
+    <link rel="stylesheet" href="pacman.css" />
+    <script src="pacman.js" defer></script>
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        background-color: #1e1e1e;
+        color: white;
+        font-family: Arial, sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        flex-direction: column;
+        gap: 2rem;
+      }
+
+      .game-console {
+        background-color: #2a2a2a;
+        border: 8px solid #444;
+        border-radius: 20px;
+        padding: 1rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1.5rem;
+        width: 90%;
+        max-width: 400px;
+        box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+      }
+
+      canvas#board {
+        width: 100%;
+        max-width: 100%;
+        aspect-ratio: 3/2;
+        background-color: black;
+        border: 5px solid #666;
+        border-radius: 12px;
+      }
+
+      .controls {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+        padding: 0 1rem;
+      }
+
+      .joystick {
+        display: grid;
+        grid-template-columns: 60px 60px 60px;
+        grid-template-rows: 60px 60px 60px;
+        gap: 5px;
+      }
+
+      .joystick button {
+        width: 60px;
+        height: 60px;
+        border-radius: 12px;
+        background-color: #333;
+        border: 2px solid #555;
+        color: white;
+        font-size: 20px;
+        font-weight: bold;
+        cursor: pointer;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+      }
+
+      .joystick button:active {
+        background-color: #555;
+      }
+
+      .joystick button.blank {
+        background-color: transparent;
+        border: none;
+        box-shadow: none;
+        cursor: default;
+      }
+
+      .actions {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 20px;
+      }
+
+      .actions button {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        background-color: crimson;
+        color: white;
+        border: none;
+        font-weight: bold;
+        font-size: 20px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+      }
+
+      .actions button:active {
+        background-color: darkred;
+      }
+
+      @media (max-width: 400px) {
+        .joystick button,
+        .actions button {
+          width: 50px;
+          height: 50px;
+        }
+
+        .joystick {
+          grid-template-columns: 50px 50px 50px;
+          grid-template-rows: 50px 50px 50px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="game-console">
+      <canvas id="board" width="300" height="200"></canvas>
+
+      <div class="controls">
+        <div class="joystick">
+          <button class="blank"></button>
+          <button class="north">↑</button>
+          <button class="blank"></button>
+
+          <button class="west">←</button>
+          <button class="blank"></button>
+          <button class="east">→</button>
+
+          <button class="blank"></button>
+          <button class="south">↓</button>
+          <button class="blank"></button>
+        </div>
+
+        <div class="actions">
+          <button>A</button>
+          <button>B</button>
+        </div>
+      </div>
+    </div>
+  </body>
 </html>
