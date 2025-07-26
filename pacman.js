@@ -68,66 +68,75 @@ let lives = 3;
 let gameOver = false;
 
 window.onload = function () {
-    document.addEventListener("click", () => {
-    const canvas = document.querySelector("canvas");
-
+  const startButton = document.getElementById("start-button");
+  const canvas = document.getElementById("board");
+    function goFullScreen() {
     if (canvas.requestFullscreen) {
       canvas.requestFullscreen();
+    } else if (canvas.webkitRequestFullscreen) {
+      canvas.webkitRequestFullscreen();
+    } else if (canvas.msRequestFullscreen) {
+      canvas.msRequestFullscreen();
     }
 
-    // Resize canvas
+    // Resize canvas to full screen
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
-  }, { once: true });
-  setTimeout(() => {
-    gameSound.play();
-  }, 500); // small delay to respect browser autoplay policies
-
-  board = document.getElementById("board");
-  board.height = boardHeight;
-  board.width = boardWidth;
-  context = board.getContext("2d");
-
-  loadImages();
-  loadMap();
-
-  for (let ghost of ghosts.values()) {
-    const newDirection = directions[Math.floor(Math.random() * 4)];
-    ghost.updateDirection(newDirection);
   }
 
-  update(); // Start game loop
+  startButton.addEventListener("click", () => {
+    startButton.style.display = "none"; // hide button
+    goFullScreen();
+    setTimeout(() => {
+      gameSound.play();
+    }, 500); // small delay to respect browser autoplay policies
 
-  document.addEventListener("keyup", movePacman);
-  let touchStartX = 0;
-  let touchStartY = 0;
+    board = document.getElementById("board");
+    board.height = boardHeight;
+    board.width = boardWidth;
+    context = board.getContext("2d");
 
-  board.addEventListener("touchstart", function (e) {
-    const touch = e.touches[0];
-    touchStartX = touch.clientX;
-    touchStartY = touch.clientY;
-  });
+    loadImages();
+    loadMap();
 
-  board.addEventListener("touchend", function (e) {
-    const touch = e.changedTouches[0];
-    const dx = touch.clientX - touchStartX;
-    const dy = touch.clientY - touchStartY;
-
-    if (Math.abs(dx) > Math.abs(dy)) {
-      // horizontal swipe
-      if (dx > 30) {
-        movePacman("d"); // right
-      } else if (dx < -30) {
-        movePacman("a"); // left
-      }
-    } else {
-      // vertical swipe
-      if (dy > 30) {
-        movePacman("s"); // down
-      } else if (dy < -30) {
-        movePacman("w"); // up
-      }
+    for (let ghost of ghosts.values()) {
+      const newDirection = directions[Math.floor(Math.random() * 4)];
+      ghost.updateDirection(newDirection);
     }
+
+    update(); // Start game loop
+
+    document.addEventListener("keyup", movePacman);
+    let touchStartX = 0;
+    let touchStartY = 0;
+
+    board.addEventListener("touchstart", function (e) {
+      const touch = e.touches[0];
+      touchStartX = touch.clientX;
+      touchStartY = touch.clientY;
+    });
+
+    board.addEventListener("touchend", function (e) {
+      const touch = e.changedTouches[0];
+      const dx = touch.clientX - touchStartX;
+      const dy = touch.clientY - touchStartY;
+
+      if (Math.abs(dx) > Math.abs(dy)) {
+        // horizontal swipe
+        if (dx > 30) {
+          movePacman("d"); // right
+        } else if (dx < -30) {
+          movePacman("a"); // left
+        }
+      } else {
+        // vertical swipe
+        if (dy > 30) {
+          movePacman("s"); // down
+        } else if (dy < -30) {
+          movePacman("w"); // up
+        }
+      }
+    });
   });
 };
 
