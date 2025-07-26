@@ -1,7 +1,7 @@
 //board
 let board;
-const rowCount = 21;
-const columnCount = 19;
+const rowCount = 26;
+const columnCount = 15;
 const tileSize = 32;
 const boardWidth = columnCount * tileSize;
 const boardHeight = rowCount * tileSize;
@@ -29,26 +29,32 @@ const gameSound = new Audio("gameBackground.mp3");
 //X = wall, O = skip, P = pac man, ' ' = food
 //Ghosts: b = blue, o = orange, p = pink, r = red
 const tileMap = [
-  "XXXXXXXXXXXXXXXXXXX",
-  "X    X     X      X",
-  "X                 X",
-  "X   X   XXX   X   X",
-  "X                 X",
-  "X X   X     X   X X",
-  "X                 X",
-  "X   X   X X   X   X",
-  "X                 X",
-  "X   X    obpr     X  X", // 👈 Ghost
-  "X                 X",
-  "X   X         X   X",
-  "X       XXX       X",
-  "X   X         X   X",
-  "X  X     P     X  X", // 👈 Pac-Man
-  "X                 X",
-  "X   X   XXX   X   X",
-  "X                 X",
-  "X     X     X     X",
-  "XXXXXXXXXXXXXXXXXXX",
+  "XXXXXXXXXXXXXXX",
+  "X      X      X",
+  "X             X",
+  "X XXX     XXX X",
+  "X             X",
+  "X X   XXX   X X",
+  "X             X",
+  "X   X     X   X",
+  "X             X",
+  "X X         X X",
+  "X    bopr     X",
+  "X    X   X    X",
+  "X             X",
+  "X   XXXXXXX   X",
+  "X             X",
+  "X X         X X",
+  "X   X     X   X",
+  "X             X",
+  "X   XX   XX   X",
+  "X             X",
+  "X X         X X",
+  "X   X     X   X",
+  "X             X", // 👻 Ghost (G)
+  "X             X",
+  "X      P      X", // 🟡 Pac-Man (P)
+  "XXXXXXXXXXXXXXX",
 ];
 
 const walls = new Set();
@@ -62,24 +68,6 @@ let lives = 3;
 let gameOver = false;
 
 window.onload = function () {
-  function simulateKeyPress(key) {
-    document.dispatchEvent(new KeyboardEvent("keyup", movePacman(key)));
-  }
-
-  document.querySelector(".north").addEventListener("click", () => {
-    simulateKeyPress("w");
-    console.log("w");
-  });
-  document.querySelector(".south").addEventListener("click", () => {
-    simulateKeyPress("s");
-    console.log("s");
-  });
-  document
-    .querySelector(".west")
-    .addEventListener("click", () => simulateKeyPress("a"));
-  document
-    .querySelector(".east")
-    .addEventListener("click", () => simulateKeyPress("d"));
   setTimeout(() => {
     gameSound.play();
   }, 500); // small delay to respect browser autoplay policies
@@ -100,6 +88,36 @@ window.onload = function () {
   update(); // Start game loop
 
   document.addEventListener("keyup", movePacman);
+  let touchStartX = 0;
+  let touchStartY = 0;
+
+  board.addEventListener("touchstart", function (e) {
+    const touch = e.touches[0];
+    touchStartX = touch.clientX;
+    touchStartY = touch.clientY;
+  });
+
+  board.addEventListener("touchend", function (e) {
+    const touch = e.changedTouches[0];
+    const dx = touch.clientX - touchStartX;
+    const dy = touch.clientY - touchStartY;
+
+    if (Math.abs(dx) > Math.abs(dy)) {
+      // horizontal swipe
+      if (dx > 30) {
+        movePacman("d"); // right
+      } else if (dx < -30) {
+        movePacman("a"); // left
+      }
+    } else {
+      // vertical swipe
+      if (dy > 30) {
+        movePacman("s"); // down
+      } else if (dy < -30) {
+        movePacman("w"); // up
+      }
+    }
+  });
 };
 
 function loadImages() {
@@ -173,6 +191,7 @@ function loadMap() {
 
 function update() {
   if (gameOver) {
+    window.location.reload();
     return;
   }
   move();
