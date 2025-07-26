@@ -29,7 +29,7 @@ const tileMap = [
   "X                 X",
   "X   X   X X   X   X",
   "X                 X",
-  "X   X    o     X  X", // 👈 Ghost
+  "X   X    obpr     X  X", // 👈 Ghost
   "X                 X",
   "X   X         X   X",
   "X       XXX       X",
