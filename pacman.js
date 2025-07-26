@@ -17,11 +17,22 @@ let pacmanLeftImage;
 let pacmanRightImage;
 let wallImage;
 
+//Sound Efects;
+const startingSound = new Audio('amongUsSound.mp3');
+const bonusSound = new Audio('bonus.mp3');
+const attackSound = new Audio('attack.mp3');
+const collisionSound = new Audio('');
+const powerSound = new Audio();
+const gameOverSound = new Audio('gameOver.mp3')
+const gameSound = new Audio('gameBackground.mp3')
+
+
+
 //X = wall, O = skip, P = pac man, ' ' = food
 //Ghosts: b = blue, o = orange, p = pink, r = red
 const tileMap = [
   "XXXXXXXXXXXXXXXXXXX",
-  "X    X     X     X X",
+  "X    X     X      X",
   "X                 X",
   "X   X   XXX   X   X",
   "X                 X",
@@ -38,7 +49,7 @@ const tileMap = [
   "X                 X",
   "X   X   XXX   X   X",
   "X                 X",
-  "X X           X X X",
+  "X     X     X     X",
   "XXXXXXXXXXXXXXXXXXX",
 ];
 
@@ -54,36 +65,40 @@ let lives = 3;
 let gameOver = false;
 
 window.onload = function () {
+  setTimeout(() => {
+    gameSound.play();
+  }, 500); // small delay to respect browser autoplay policies
+
   board = document.getElementById("board");
   board.height = boardHeight;
   board.width = boardWidth;
-  context = board.getContext("2d"); //used for drawing on the board
+  context = board.getContext("2d");
 
   loadImages();
   loadMap();
-  // console.log(walls.size)
-  // console.log(foods.size)
-  // console.log(ghosts.size)
+
   for (let ghost of ghosts.values()) {
     const newDirection = directions[Math.floor(Math.random() * 4)];
     ghost.updateDirection(newDirection);
   }
-  update();
+
+  update(); // Start game loop
+
   document.addEventListener("keyup", movePacman);
 };
 
 function loadImages() {
   wallImage = new Image();
-  wallImage.src = "./wall.png";
+  wallImage.src = "./grayWall.png";
 
   blueGhostImage = new Image();
-  blueGhostImage.src = "./blueGhost.png";
+  blueGhostImage.src = "./yellow.png";
   orangeGhostImage = new Image();
-  orangeGhostImage.src = "./orangeGhost.png";
+  orangeGhostImage.src = "./blue.png";
   pinkGhostImage = new Image();
-  pinkGhostImage.src = "./pinkGhost.png";
+  pinkGhostImage.src = "./pink.png";
   redGhostImage = new Image();
-  redGhostImage.src = "./redGhost.png";
+  redGhostImage.src = "./red.png";
 
   pacmanUpImage = new Image();
   pacmanUpImage.src = "./pacmanUp.png";
@@ -130,6 +145,11 @@ function loadMap() {
       }
     }
   }
+  document.addEventListener('keydown', ()=>{
+    console.log("amongUS")
+    
+    gameSound.play();
+  },{once: true})
 }
 
 function update() {
@@ -227,8 +247,15 @@ function move() {
     // Check if ghost collided with Pac-Man
     if (collision(ghost, pacman)) {
       lives -= 1;
+      setTimeout(()=>{
+        attackSound.currentTime = 70/1000;
+        attackSound.play();
+      })
       if (lives == 0) {
         gameOver = true;
+        setTimeout(()=>{
+          gameOverSound.play()
+        })
         return;
       }
       resetPositions();
@@ -286,7 +313,12 @@ function move() {
     if (collision(pacman, food)) {
       foodEaten = food;
       score += 10;
-      break;
+      setTimeout(()=>{
+        bonusSound.currentTime = 100/1000;
+        console.log('bonusSouund!')
+        bonusSound.play()
+      }, )
+      
     }
   }
   foods.delete(foodEaten);
