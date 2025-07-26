@@ -68,6 +68,17 @@ let lives = 3;
 let gameOver = false;
 
 window.onload = function () {
+    document.addEventListener("click", () => {
+    const canvas = document.querySelector("canvas");
+
+    if (canvas.requestFullscreen) {
+      canvas.requestFullscreen();
+    }
+
+    // Resize canvas
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }, { once: true });
   setTimeout(() => {
     gameSound.play();
   }, 500); // small delay to respect browser autoplay policies
