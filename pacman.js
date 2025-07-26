@@ -271,7 +271,7 @@ function updateGhost(ghost) {
   };
 
   const dist = distance(ghostCenter, pacmanCenter);
-  const visionRadius = tileSize * 5; // Adjust as needed
+  const visionRadius = tileSize * 10; // Adjust as needed
 
   if (dist < visionRadius) {
     // Move towards Pac-Man
