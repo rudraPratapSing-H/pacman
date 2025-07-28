@@ -39,7 +39,7 @@ const tileMap = [
   "X   X     X   X",
   "X             X",
   "X X         X X",
-  "X    bopr     X",
+  "X    b p      X",
   "X    X   X    X",
   "X             X",
   "X   XXXXXXX   X",
@@ -67,10 +67,13 @@ let score = 0;
 let lives = 3;
 let gameOver = false;
 
+let currentDirection = "R";
+let nextDirection = null;
+
 window.onload = function () {
   const startButton = document.getElementById("start-button");
   const canvas = document.getElementById("board");
-    function goFullScreen() {
+  function goFullScreen() {
     if (canvas.requestFullscreen) {
       canvas.requestFullscreen();
     } else if (canvas.webkitRequestFullscreen) {
@@ -211,7 +214,6 @@ function loadMap() {
 
 function update() {
   if (gameOver) {
-    
     return;
   }
   move();
@@ -288,8 +290,28 @@ function updateGhost(ghost) {
 }
 
 function move() {
+  if (isCenteredOnTile(pacman)) {
+    if (nextDirection) {
+      pacman.updateDirection(nextDirection);
+      currentDirection = pacman.direction;
+    }
+  }
+
+  // Always keep Pac-Man moving in current direction
+  pacman.updateDirection(currentDirection);
   pacman.x += pacman.velocityX;
   pacman.y += pacman.velocityY;
+
+  // Update Pac-Man sprite based on currentDirection
+  if (pacman.direction == "U") {
+    pacman.image = pacmanUpImage;
+  } else if (pacman.direction == "D") {
+    pacman.image = pacmanDownImage;
+  } else if (pacman.direction == "L") {
+    pacman.image = pacmanLeftImage;
+  } else if (pacman.direction == "R") {
+    pacman.image = pacmanRightImage;
+  }
 
   //check wall collisions
   for (let wall of walls.values()) {
@@ -313,7 +335,7 @@ function move() {
         gameOver = true;
         setTimeout(() => {
           gameOverSound.play();
-        },4000);
+        }, 4000);
         window.location.reload();
         return;
       }
@@ -400,26 +422,18 @@ function movePacman(e) {
   }
 
   if (e.code == "ArrowUp" || e.code == "KeyW" || e == "w") {
-    pacman.updateDirection("U");
+    nextDirection = "U";
   } else if (e.code == "ArrowDown" || e.code == "KeyS" || e == "s") {
-    pacman.updateDirection("D");
+    nextDirection = "D";
   } else if (e.code == "ArrowLeft" || e.code == "KeyA" || e == "a") {
-    pacman.updateDirection("L");
+    nextDirection = "L";
   } else if (e.code == "ArrowRight" || e.code == "KeyD" || e == "d") {
-    pacman.updateDirection("R");
-  }
-
-  //update pacman images
-  if (pacman.direction == "U") {
-    pacman.image = pacmanUpImage;
-  } else if (pacman.direction == "D") {
-    pacman.image = pacmanDownImage;
-  } else if (pacman.direction == "L") {
-    pacman.image = pacmanLeftImage;
-  } else if (pacman.direction == "R") {
-    pacman.image = pacmanRightImage;
+    nextDirection = "R";
   }
 }
+
+//update pacman images
+
 
 function collision(a, b) {
   return (
@@ -428,6 +442,10 @@ function collision(a, b) {
     a.y < b.y + b.height && //a's top left corner doesn't reach b's bottom left corner
     a.y + a.height > b.y
   ); //a's bottom left corner passes b's top left corner
+}
+
+function isCenteredOnTile(entity) {
+  return entity.x % tileSize === 0 && entity.y % tileSize === 0;
 }
 
 function resetPositions() {
